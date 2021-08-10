@@ -242,6 +242,27 @@ nav.navbar a.nav-link.active, nav.navbar a.nav-link:hover {
   background: #4aa44c;
 }
 
+.about-section .progress .progress-bar-skill5 {
+  background: #78c27a;
+}
+
+.about-section .progress .progress-bar-skill6 {
+  background: #55b257;
+}
+
+.about-section .progress .progress-bar-skill7 {
+  background: #4aa44c;
+}
+
+.about-section .progress .progress-bar-skill8 {
+  background: #78c27a;
+}
+
+.about-section .progress .progress-bar-skill9 {
+  background: #4aa44c;
+}
+
+
 /*
 *
 * =====================
