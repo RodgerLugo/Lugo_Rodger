@@ -496,8 +496,8 @@ nav.navbar a.nav-link.active, nav.navbar a.nav-link:hover {
 
 .reference .overlay {
   background: rgba(0, 0, 0, 0.7);
-  width: 50px;
-  height: 50px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   top: 0;
   left: 0;
