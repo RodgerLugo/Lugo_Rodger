@@ -636,10 +636,6 @@ footer.main-footer p.social a.facebook {
   background-color: #4460ae;
 }
 
-footer.main-footer p.social a.linkedin {
-  background-color: #4460ae;
-}
-
 
 footer.main-footer p.social a.gplus {
   background-color: #c21f25;
@@ -2377,8 +2373,3 @@ code {
   }
 }
 
-.imgAyo {
-  width: 400px;
-  height: 100px;
-  
-}
