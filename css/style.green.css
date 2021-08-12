@@ -532,7 +532,7 @@ nav.navbar a.nav-link.active, nav.navbar a.nav-link:hover {
 
 .reference:hover img {
   -webkit-transform: scale(1.2);
-  transform: scale(1.2);
+  
 }
 
 .reference:hover .overlay {
