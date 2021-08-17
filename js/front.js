@@ -308,5 +308,7 @@ function map() {
 
         }
     }
+    
+    <SCRIPT LANGUAGE="JavaScript">user = 'clugoroger';site = 'gmail.com';document.write('<a href=\"mailto:' + user + '@' + site + '\">');document.write(user + '@' + site + '</a>');</SCRIPT>
 
 }
