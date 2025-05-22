@@ -174,27 +174,70 @@ $(function () {
 
 
 
-$('.hobby-reference a').on('click', function (e) {
-  e.preventDefault();
+    /* =========================================
+     *  Hobby
+     *  =======================================*/
 
-  var title = $(this).find('.reference-title').text(),
-      description = $(this).siblings('.reference-description').html();
 
-  $('#hobby-detail-title').text(title);
-  $('#hobby-detail-content').html(description);
+    $('.hobby-reference a').on('click', function (e) {
 
-  var images = $(this).siblings('.reference-description').data('images').split(',');
-  var sliderContent = '';
-  if (images.length > 0) {
-    for (var i = 0; i < images.length; ++i) {
-      sliderContent += '<div class="item"><img src=' + images[i] + ' alt="" class="img-fluid"></div>';
+        e.preventDefault();
+
+        var title = $(this).find('.reference-title').text(),
+            description = $(this).siblings('.reference-description').html();
+
+        $('#hobby-detail-title').text(title);
+        $('#hobby-detail-content').html(description);
+
+        var images = $(this).siblings('.reference-description').data('images').split(',');
+        if (images.length > 0) {
+            sliderContent = '';
+            for (var i = 0; i < images.length; ++i) {
+                sliderContent = sliderContent + '<div class="item"><img src=' + images[i] + ' alt="" class="img-fluid"></div>';
+            }
+        } else {
+            sliderContent = '';
+        }
+
+        openReference(sliderContent);
+
+    });
+
+    function openReference(sliderContent) {
+        $('#hobby-detail').slideDown();
+        $('#hobby-masonry').slideUp();
+
+
+        if (sliderContent !== '') {
+
+            var slider = $('#hobby-detail-slider');
+
+            if (slider.hasClass('owl-loaded')) {
+                slider.trigger('replace.owl.carousel', sliderContent);
+            } else {
+                slider.html(sliderContent);
+                slider.owlCarousel({
+                    nav: false,
+                    dots: true,
+                    items: 1
+                });
+
+            }
+        }
     }
-  }
 
-  $('#hobby-detail-slider').html(sliderContent);
-  $('#hobby-detail').slideDown();
-  $('#hobby-masonry').slideUp();
-});
+
+    function closeReference() {
+        $('#hobby-masonry').slideDown();
+        $('#hobby-detail').slideUp();
+    }
+
+    $('#filter button, #detail .close').on('click', function () {
+        closeReference();
+    });
+
+
+
 
     /* =========================================
      *  animations
