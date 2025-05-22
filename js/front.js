@@ -151,40 +151,6 @@ $('.reference a').on('click', function (e) {
 });
 
 
-    function openReference(sliderContent) {
-        $('#detail').slideDown();
-        
-        // Detect which section the clicked item came from
-        var parentSection = $(event.target).closest('#hobby-masonry').length ? '#hobby-masonry' : '#references-masonry';
-        $(parentSection).slideUp();
-        
-        // Store which section to re-show on close
-        $('#detail').data('lastSection', parentSection);
-
-
-/*
-        $('#detail').slideDown();
-        $('#references-masonry').slideUp();
-*/
-
-        if (sliderContent !== '') {
-
-            var slider = $('#detail-slider');
-
-            if (slider.hasClass('owl-loaded')) {
-                slider.trigger('replace.owl.carousel', sliderContent);
-            } else {
-                slider.html(sliderContent);
-                slider.owlCarousel({
-                    nav: false,
-                    dots: true,
-                    items: 1
-                });
-
-            }
-        }
-    }
-
 function closeReference() {
     const lastSection = $('#detail').data('lastSection') || '#references-masonry';
     $(lastSection).slideDown();
