@@ -118,12 +118,11 @@ $(function () {
 $('.reference a').on('click', function (e) {
     e.preventDefault();
 
-    const $referenceItem = $(this).closest('.reference-item'); // Fixes event scope
+    const $referenceItem = $(this).closest('.reference-item');
     const title = $referenceItem.find('.reference-title').text();
     const description = $referenceItem.find('.reference-description').html();
 
-    console.log("Clicked item title:", $referenceItem.find('.reference-title').text());
-    console.log("Parent section:", parentSection);
+    console.log('Clicked item title:', title);
 
     $('#detail-title').text(title);
     $('#detail-content').html(description);
@@ -136,6 +135,8 @@ $('.reference a').on('click', function (e) {
     }
 
     const parentSection = $referenceItem.closest('#hobby-masonry').length ? '#hobby-masonry' : '#references-masonry';
+    console.log('Parent section:', parentSection);
+    
     $('#detail').data('lastSection', parentSection);
     $('#detail').slideDown();
     $(parentSection).slideUp();
