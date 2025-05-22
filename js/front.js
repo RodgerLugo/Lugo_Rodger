@@ -173,6 +173,29 @@ $(function () {
     });
 
 
+
+$('.hobby-reference a').on('click', function (e) {
+  e.preventDefault();
+
+  var title = $(this).find('.reference-title').text(),
+      description = $(this).siblings('.reference-description').html();
+
+  $('#hobby-detail-title').text(title);
+  $('#hobby-detail-content').html(description);
+
+  var images = $(this).siblings('.reference-description').data('images').split(',');
+  var sliderContent = '';
+  if (images.length > 0) {
+    for (var i = 0; i < images.length; ++i) {
+      sliderContent += '<div class="item"><img src=' + images[i] + ' alt="" class="img-fluid"></div>';
+    }
+  }
+
+  $('#hobby-detail-slider').html(sliderContent);
+  $('#hobby-detail').slideDown();
+  $('#hobby-masonry').slideUp();
+});
+
     /* =========================================
      *  animations
      *  =======================================*/
