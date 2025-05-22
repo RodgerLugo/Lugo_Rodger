@@ -141,8 +141,19 @@ $(function () {
 
     function openReference(sliderContent) {
         $('#detail').slideDown();
-        $('#references-masonry').slideUp();
+        
+        // Detect which section the clicked item came from
+        var parentSection = $(event.target).closest('#hobby-masonry').length ? '#hobby-masonry' : '#references-masonry';
+        $(parentSection).slideUp();
+        
+        // Store which section to re-show on close
+        $('#detail').data('lastSection', parentSection);
 
+
+/*
+        $('#detail').slideDown();
+        $('#references-masonry').slideUp();
+*/
 
         if (sliderContent !== '') {
 
@@ -164,8 +175,15 @@ $(function () {
 
 
     function closeReference() {
+        var lastSection = $('#detail').data('lastSection') || '#references-masonry';
+        $(lastSection).slideDown();
+        $('#detail').slideUp();
+
+/*
         $('#references-masonry').slideDown();
         $('#detail').slideUp();
+
+*/
     }
 
     $('#filter button, #detail .close').on('click', function () {
