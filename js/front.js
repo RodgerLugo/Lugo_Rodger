@@ -122,6 +122,9 @@ $('.reference a').on('click', function (e) {
     const title = $referenceItem.find('.reference-title').text();
     const description = $referenceItem.find('.reference-description').html();
 
+    console.log("Clicked item title:", $referenceItem.find('.reference-title').text());
+    console.log("Parent section:", parentSection);
+
     $('#detail-title').text(title);
     $('#detail-content').html(description);
 
