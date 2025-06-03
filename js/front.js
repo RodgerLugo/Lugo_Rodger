@@ -157,20 +157,20 @@ $('.reference a').on('click', function (e) {
     $('#detail-title').text(title || "Details"); // Set title, fallback if empty
     $('#detail-content').html(descriptionHTML || "<p>No description available.</p>"); // Set description, fallback if empty
 
-    let sliderContent = '';
-    if (imagesData && typeof imagesData === 'string' && imagesData.trim() !== '') {
-        const images = imagesData.split(',');
-        console.log('Images array:', images);
-        for (let i = 0; i < images.length; ++i) {
-            if (images[i].trim() !== '') { // Ensure image path is not empty
-                sliderContent += `<div class="item"><img src="<span class="math-inline">\{images\[i\]\.trim\(\)\}" alt\="</span>{title} image ${i + 1}" class="img-fluid"></div>`;
-            }
-        }
-    } else {
-        console.warn('No images found or data-images attribute is empty/invalid for:', title);
-        // Optionally, provide placeholder content if no images
-        sliderContent = '<div class="item"><p class="text-center">No images to display.</p></div>';
-    }
+           let sliderContent = '';
+        if (imagesData && typeof imagesData === 'string' && imagesData.trim() !== '') {
+            const images = imagesData.split(',');
+            console.log('Images array:', images);
+            for (let i = 0; i < images.length; ++i) {
+                if (images[i].trim() !== '') { // Ensure image path is not empty
+               
+                    sliderContent += `<div class="item"><img src="<span class="math-inline">\{images\[i\]\.trim\(\)\}" alt\="</span>{title} image ${i + 1}" class="img-fluid"></div>`;
+                }
+            }
+        } else {
+            console.warn('No images found or data-images attribute is empty/invalid for:', title);
+            sliderContent = '<div class="item"><p class="text-center">No images to display.</p></div>';
+        }
     console.log('Generated slider content:', sliderContent.length > 100 ? sliderContent.substring(0,100) + "..." : sliderContent);
 
     // Determine which masonry section to hide/show later
