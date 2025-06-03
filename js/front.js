@@ -92,156 +92,85 @@ $(function () {
      * filter
      *  =======================================*/
 
-    $('#project-filter a, #hobby-filter a').click(function (e) {
-        e.preventDefault();
-        console.log('Filter link clicked:', $(this).attr('data-filter'));
+    $('#filter a').click(function (e) {
+        e.preventDefault();
 
-        var $filterLink = $(this);
-        var $filterList = $filterLink.closest('ul'); // Gets the specific ul (project-filter or hobby-filter)
+        $('#filter li').removeClass('active');
+        $(this).parent('li').addClass('active');
 
-        // Deactivate other active links within THIS filter list only
-        $filterList.find('li').removeClass('active');
-        // Activate the clicked link's parent li
-        $filterLink.parent('li').addClass('active');
+        var categoryToFilter = $(this).attr('data-filter');
 
-        var categoryToFilter = $filterLink.attr('data-filter');
-        var $masonryContainer;
+        $('.reference-item').each(function () {
 
-        // Determine which masonry container to filter based on the filter list ID
-        if ($filterList.attr('id') === 'project-filter') {
-            $masonryContainer = $('#references-masonry');
-            console.log('Filtering #references-masonry');
-        } else if ($filterList.attr('id') === 'hobby-filter') {
-            $masonryContainer = $('#hobby-masonry');
-            console.log('Filtering #hobby-masonry');
-        }
+            if ($(this).data('category') === categoryToFilter || categoryToFilter === 'all') {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
 
-        if ($masonryContainer && $masonryContainer.length) {
-            $masonryContainer.find('.reference-item').each(function () {
-                if ($(this).data('category') === categoryToFilter || categoryToFilter === 'all') {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        } else {
-            console.error('Could not find the masonry container for the filter:', $filterList.attr('id'));
-        }
-    });
+    });
 
 
     /* =========================================
      * reference functionality
      *  =======================================*/
-$('.reference a').on('click', function (e) {
-    e.preventDefault();
-    console.log('---- Reference item clicked ----');
+    $('.reference a').on('click', function (e) {
 
-    const $referenceLink = $(this);
-    const $referenceItem = $referenceLink.closest('.reference-item');
+        e.preventDefault();
 
-    if (!$referenceItem.length) {
-        console.error('Could not find .reference-item ancestor for clicked link.');
-        return;
-    }
-    console.log('Clicked item $referenceItem:', $referenceItem);
+        var title = $(this).find('.reference-title').text(),
+            description = $(this).siblings('.reference-description').html();
 
-    const title = $referenceItem.find('.reference-title').text();
-    const descriptionHTML = $referenceItem.find('.reference-description').html(); // Get inner HTML for description
-    const imagesData = $referenceItem.find('.reference-description').data('images');
+        $('#detail-title').text(title);
+        $('#detail-content').html(description);
 
-    console.log('Title:', title);
-    console.log('Description HTML found:', descriptionHTML ? 'Yes' : 'No');
-    console.log('Raw data-images attribute:', imagesData);
+        var images = $(this).siblings('.reference-description').data('images').split(',');
+        if (images.length > 0) {
+            sliderContent = '';
+            for (var i = 0; i < images.length; ++i) {
+                sliderContent = sliderContent + '<div class="item"><img src=' + images[i] + ' alt="" class="img-fluid"></div>';
+            }
+        } else {
+            sliderContent = '';
+        }
 
-    $('#detail-title').text(title || "Details"); // Set title, fallback if empty
-    $('#detail-content').html(descriptionHTML || "<p>No description available.</p>"); // Set description, fallback if empty
+        openReference(sliderContent);
 
-           let sliderContent = '';
-        if (imagesData && typeof imagesData === 'string' && imagesData.trim() !== '') {
-            const images = imagesData.split(',');
-            console.log('Images array:', images);
-            for (let i = 0; i < images.length; ++i) {
-                if (images[i].trim() !== '') { // Ensure image path is not empty
-               
-                    sliderContent += `<div class="item"><img src="<span class="math-inline">\{images\[i\]\.trim\(\)\}" alt\="</span>{title} image ${i + 1}" class="img-fluid"></div>`;
-                }
-            }
-        } else {
-            console.warn('No images found or data-images attribute is empty/invalid for:', title);
-            sliderContent = '<div class="item"><p class="text-center">No images to display.</p></div>';
-        }
-    console.log('Generated slider content:', sliderContent.length > 100 ? sliderContent.substring(0,100) + "..." : sliderContent);
-
-    // Determine which masonry section to hide/show later
-    const $hobbyMasonry = $referenceItem.closest('#hobby-masonry');
-    const parentSectionId = $hobbyMasonry.length ? '#hobby-masonry' : '#references-masonry';
-    console.log('Identified parent section for slideUp/slideDown:', parentSectionId);
-    
-    $('#detail').data('lastSection', parentSectionId); // Store the ID of the section to reopen
-    console.log('Hiding:', parentSectionId, 'and showing #detail');
-    $(parentSectionId).slideUp(400, function() {
-        console.log(parentSectionId + ' hidden.');
-    });
-    $('#detail').slideDown(400, function() {
-        console.log('#detail shown.');
     });
 
-
-    const $slider = $('#detail-slider');
-    console.log('Slider element $slider:', $slider);
-
-    if ($slider.hasClass('owl-loaded')) {
-        console.log('Slider is already loaded. Replacing and refreshing.');
-        $slider.trigger('replace.owl.carousel', sliderContent).trigger('refresh.owl.carousel');
-    } else {
-        console.log('Slider not loaded. Initializing.');
-        $slider.html(sliderContent); // Set content before initializing
-        if (sliderContent.includes('<img')) { // Only initialize if there are images
-            $slider.owlCarousel({
-                nav: false,
-                dots: true,
-                items: 1
-            });
-            console.log('Owl Carousel initialized.');
-        } else {
-            $slider.html('<p class="text-center">No images to display in slider.</p>'); // Fallback if sliderContent was empty after checks
-            console.log('Skipped Owl Carousel initialization as no valid image content.');
-        }
-    }
-    console.log('---- End of Reference item click handler ----');
-});
+    function openReference(sliderContent) {
+        $('#detail').slideDown();
+        $('#references-masonry').slideUp();
 
 
-function closeReference() {
-    const lastSection = $('#detail').data('lastSection') || '#references-masonry'; // Fallback
-    console.log('Closing #detail, showing:', lastSection);
-    $(lastSection).slideDown();
-    $('#detail').slideUp();
-}
-/*
+        if (sliderContent !== '') {
+
+            var slider = $('#detail-slider');
+
+            if (slider.hasClass('owl-loaded')) {
+                slider.trigger('replace.owl.carousel', sliderContent);
+            } else {
+                slider.html(sliderContent);
+                slider.owlCarousel({
+                    nav: false,
+                    dots: true,
+                    items: 1
+                });
+
+            }
+        }
+    }
+
+
     function closeReference() {
-        var lastSection = $('#detail').data('lastSection') || '#references-masonry';
-        $(lastSection).slideDown();
-        $('#detail').slideUp();
-
-
         $('#references-masonry').slideDown();
         $('#detail').slideUp();
-
-
     }
-*/
-$('#detail .close').on('click', function () {
-        console.log('#detail .close button clicked');
-        closeReference();
-});
 
-
-
-
-
-
+    $('#filter button, #detail .close').on('click', function () {
+        closeReference();
+    });
 
 
     /* =========================================
