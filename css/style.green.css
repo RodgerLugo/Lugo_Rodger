@@ -2373,3 +2373,19 @@ code {
   }
 }
 
+
+/* Active state – matches your site’s green/teal */
+section#reference ul#filter li.active a {
+  color: #fff;
+  background: #4fbfa8;        /* your theme teal */
+  border-color: #4fbfa8;
+  box-shadow: 0 6px 14px rgba(79, 191, 168, 0.25);
+}
+
+/* Non-active state background – softer than pure white */
+section#reference ul#filter li a {
+  background: #f8f8f8;        /* soft gray background */
+  color: #333;
+}
+
+
