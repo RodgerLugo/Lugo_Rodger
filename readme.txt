@@ -1,5 +1,5 @@
 💼 Portfolio Website
-This repository contains my personal portfolio website, showcasing my work in IT, Cybersecurity, and Web Development.
+This repository contains my personal portfolio website, showcasing my work in IT Support, Cybersecurity, and Web Development.
 It serves as a central hub where recruiters and collaborators can explore my projects, skills, and professional background.
 
 🌐 Live Site
