@@ -3,8 +3,8 @@ This repository contains my personal portfolio website, showcasing my work in IT
 It serves as a central hub where recruiters and collaborators can explore my projects, skills, and professional background.
 
 🌐 Live Site
-[Visit My Portfolio]
-(https://rodgerlugo.github.io/Lugo_Rodger/)
+
+[Visit My Portfolio](https://rodgerlugo.github.io/Lugo_Rodger/)
 
 📂 Featured Projects
 Customer Retention Prediction – Data engineering & analytics project using GCP, Airflow, BigQuery, and Looker.
