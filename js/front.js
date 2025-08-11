@@ -312,77 +312,79 @@ function map() {
 }
 
 
-// your current code ends here
-}  // <--- last closing brace of your existing front.js
+/* ===== Scoped portfolio behaviour for each #reference section ===== */
+jQuery(function ($) {
 
-// Paste the new scoped filtering and reference-opening code here
-$('#filter a').off('click').on('click', function (e) {
-    e.preventDefault();
+  $('section#reference').each(function () {
+    var $section = $(this);
 
-    var section = $(this).closest('section'); // scope to the section
-    section.find('#filter li').removeClass('active');
-    $(this).parent('li').addClass('active');
+    // Scoped filter for this section only
+    $section.find('ul#filter a').off('click').on('click', function (e) {
+      e.preventDefault();
+      var filter = $(this).data('filter');
 
-    var categoryToFilter = $(this).attr('data-filter');
+      $(this).closest('ul#filter').find('li').removeClass('active');
+      $(this).parent().addClass('active');
 
-    section.find('.reference-item').each(function () {
-        if ($(this).data('category') === categoryToFilter || categoryToFilter === 'all') {
-            $(this).show();
-        } else {
-            $(this).hide();
-        }
+      var $items = $section.find('#references-masonry .reference-item');
+      if (filter === 'all') {
+        $items.show();
+      } else {
+        $items.hide().filter('[data-category="' + filter + '"]').show();
+      }
     });
-});
 
-$('.reference a').off('click').on('click', function (e) {
-    e.preventDefault();
+    // Scoped "open detail" for this section only
+    $section.find('.reference a').off('click').on('click', function (e) {
+      e.preventDefault();
 
-    var section = $(this).closest('section'); // scope to the section
-    var title = $(this).find('.reference-title').text(),
-        description = $(this).siblings('.reference-description').html();
+      var $item   = $(this).closest('.reference-item');
+      var $detail = $section.find('[id="detail"]');
+      var $title  = $detail.find('[id="detail-title"]');
+      var $content= $detail.find('[id="detail-content"]');
+      var $slider = $detail.find('[id="detail-slider"]');
 
-    section.find('#detail-title').text(title);
-    section.find('#detail-content').html(description);
+      var titleText = $item.find('.reference-title').text();
+      var descHTML  = $item.find('.reference-description').html() || '';
 
-    var images = $(this).siblings('.reference-description').data('images').split(',');
-    var sliderContent = '';
+      // Safely parse images list
+      var imagesCSV = ($item.find('.reference-description').data('images') || '').toString();
+      var images    = imagesCSV ? imagesCSV.split(',') : [];
 
-    if (images.length > 0) {
-        for (var i = 0; i < images.length; ++i) {
-            sliderContent += '<div class="item"><img src="' + images[i] + '" alt="" class="img-fluid"></div>';
-        }
-    }
+      // Populate title/content
+      $title.text(titleText);
+      $content.html(descHTML);
 
-    openReference(section, sliderContent);
-});
+      // Rebuild slider for THIS section
+      try { $slider.trigger('destroy.owl.carousel'); } catch (err) {}
+      $slider.html('');
+      images.forEach(function (src) {
+        src = (src || '').trim();
+        if (src) $slider.append('<div class="item"><img src="' + src + '" class="img-fluid" alt=""></div>');
+      });
+      if (images.length) {
+        $slider.owlCarousel({
+          items: 1,
+          loop: images.length > 1,
+          nav: true,
+          dots: true,
+          autoplay: false,
+          smartSpeed: 300
+        });
+      }
 
-function openReference(section, sliderContent) {
-    section.find('#detail').slideDown();
-    section.find('#references-masonry').slideUp();
+      // Show detail inside THIS section
+      $section.find('#references-masonry').slideUp(250);
+      $detail.stop(true, true).slideDown(250);
 
-    if (sliderContent !== '') {
-        var slider = section.find('#detail-slider');
+      // Close (scoped)
+      $detail.find('.close').off('click').on('click', function () {
+        $detail.slideUp(200);
+        $section.find('#references-masonry').slideDown(200);
+      });
+    });
 
-        if (slider.hasClass('owl-loaded')) {
-            slider.trigger('replace.owl.carousel', sliderContent);
-        } else {
-            slider.html(sliderContent);
-            slider.owlCarousel({
-                nav: false,
-                dots: true,
-                items: 1
-            });
-        }
-    }
-}
+  });
 
-function closeReference(section) {
-    section.find('#references-masonry').slideDown();
-    section.find('#detail').slideUp();
-}
-
-$('#filter button, #detail .close').off('click').on('click', function () {
-    var section = $(this).closest('section');
-    closeReference(section);
 });
 
