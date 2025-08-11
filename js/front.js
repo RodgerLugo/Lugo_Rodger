@@ -304,7 +304,7 @@ function map() {
                 minwidth: 200,
                 maxWidth: 600,
                 className: 'map-custom-popup'
-            })
+            });
 
         }
     }
