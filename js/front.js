@@ -310,3 +310,79 @@ function map() {
     }
     
 }
+
+
+// your current code ends here
+}  // <--- last closing brace of your existing front.js
+
+// Paste the new scoped filtering and reference-opening code here
+$('#filter a').off('click').on('click', function (e) {
+    e.preventDefault();
+
+    var section = $(this).closest('section'); // scope to the section
+    section.find('#filter li').removeClass('active');
+    $(this).parent('li').addClass('active');
+
+    var categoryToFilter = $(this).attr('data-filter');
+
+    section.find('.reference-item').each(function () {
+        if ($(this).data('category') === categoryToFilter || categoryToFilter === 'all') {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+});
+
+$('.reference a').off('click').on('click', function (e) {
+    e.preventDefault();
+
+    var section = $(this).closest('section'); // scope to the section
+    var title = $(this).find('.reference-title').text(),
+        description = $(this).siblings('.reference-description').html();
+
+    section.find('#detail-title').text(title);
+    section.find('#detail-content').html(description);
+
+    var images = $(this).siblings('.reference-description').data('images').split(',');
+    var sliderContent = '';
+
+    if (images.length > 0) {
+        for (var i = 0; i < images.length; ++i) {
+            sliderContent += '<div class="item"><img src="' + images[i] + '" alt="" class="img-fluid"></div>';
+        }
+    }
+
+    openReference(section, sliderContent);
+});
+
+function openReference(section, sliderContent) {
+    section.find('#detail').slideDown();
+    section.find('#references-masonry').slideUp();
+
+    if (sliderContent !== '') {
+        var slider = section.find('#detail-slider');
+
+        if (slider.hasClass('owl-loaded')) {
+            slider.trigger('replace.owl.carousel', sliderContent);
+        } else {
+            slider.html(sliderContent);
+            slider.owlCarousel({
+                nav: false,
+                dots: true,
+                items: 1
+            });
+        }
+    }
+}
+
+function closeReference(section) {
+    section.find('#references-masonry').slideDown();
+    section.find('#detail').slideUp();
+}
+
+$('#filter button, #detail .close').off('click').on('click', function () {
+    var section = $(this).closest('section');
+    closeReference(section);
+});
+
